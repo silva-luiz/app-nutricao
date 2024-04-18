@@ -1,16 +1,19 @@
-# app_nutricao
+Aplicativo de nutrição
+Aplicativo criado com o intuito de ajudar na criação de cardápios de dieta, permitindo o cadastro de alimentos, sugestões de refeições, compartilhamento de alimentos e cardápios, além do cadastro de usuário, o que permite que cada perfil tenha seu próprio cardápio com seus alimentos preferidos.
 
-A new Flutter project.
+Stack
+O aplicativo usa das seguintes tecnologias para sua construção:
 
-## Getting Started
+Flutter;
+Banco de dados SQFlite.
+Documentação
+Para a construção do projeto, as seguintes documentações foram utilizadas:
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Flutter
+SQFlite
+Integrantes do projeto
+Carolina Medella
+João Vitor Rafagnin
+Luiz Henrique Gomes
+Nicolas Duque
+Rafael Bazolli
