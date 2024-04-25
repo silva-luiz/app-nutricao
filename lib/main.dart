@@ -1,4 +1,5 @@
 import 'package:app_nutricao/_core/color_list.dart';
+import 'package:app_nutricao/pages/index.dart';
 import 'package:app_nutricao/pages/login.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const Index(),
     );
   }
 }
