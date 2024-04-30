@@ -49,7 +49,7 @@ class _IndexState extends State<Index> {
                 color: AppColors.textLight,
               ),
             ),
-          )
+          ),
         ],
         backgroundColor: AppColors.primaryColor,
       ),

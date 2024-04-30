@@ -1,6 +1,8 @@
 import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/pages/index.dart';
 import 'package:app_nutricao/pages/login.dart';
+import 'package:app_nutricao/pages/new_food.dart';
+import 'package:app_nutricao/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,11 +18,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
        debugShowCheckedModeBanner: false,
       title: 'App nutrição',
+      initialRoute: '/login',
+      routes: AppRoutes.loadRoutes(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
         useMaterial3: true,
       ),
-      home: const Index(),
+      home: const LoginPage(),
     );
   }
 }

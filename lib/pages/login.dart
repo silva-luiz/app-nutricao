@@ -1,5 +1,6 @@
 import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/_core/input_style.dart';
+import 'package:app_nutricao/components/avatar.dart';
 import 'package:app_nutricao/components/custom_button.dart';
 import 'package:app_nutricao/data/database_helper.dart';
 import 'package:flutter/material.dart';
@@ -160,91 +161,97 @@ class _LoginPageState extends State<LoginPage> {
       isScrollControlled: true,
       builder: (_) => SafeArea(
         top: true,
-        child: Form(
-          key: _modalFormKey,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Cadastrar novo Usuário',
-                      style: TextStyle(
-                          fontSize: 52,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primaryColor),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _modalFormKey,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                        controller: _nameController,
-                        decoration: textInputDecoration("Nome"),
-                        validator: (String? value) {
-                          if (value == null || value.length < 3) {
-                            return "Por favor, digite um nome válido";
-                          }
-                          return null;
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _emailController,
-                      decoration: textInputDecoration("Email"),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (String? value) {
-                        if (value == null || !value.contains("@")) {
-                          return "Por favor, digite um email válido";
-                        }
-                        return null;
-                      },
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Cadastrar novo Usuário',
+                        style: TextStyle(
+                            fontSize: 52,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primaryColor),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                        controller: _passwordController,
-                        decoration: textInputDecoration("Senha"),
-                        obscureText: true,
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const AvatarImage(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: _nameController,
+                          decoration: textInputDecoration("Nome"),
+                          validator: (String? value) {
+                            if (value == null || value.length < 3) {
+                              return "Por favor, digite um nome válido";
+                            }
+                            return null;
+                          }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: _emailController,
+                        decoration: textInputDecoration("Email"),
+                        keyboardType: TextInputType.emailAddress,
                         validator: (String? value) {
-                          if (value == null) {
-                            return "Por favor, digite uma senha válida";
-                          }
-                          if (value.length < 8) {
-                            return "Por favor, digite uma senha com pelo menos 8 dígitos";
+                          if (value == null || !value.contains("@")) {
+                            return "Por favor, digite um email válido";
                           }
                           return null;
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                        controller: _confirmPasswordController,
-                        decoration: textInputDecoration("Confirmar Senha"),
-                        obscureText: true,
-                        validator: (String? value) {
-                          if (value == null) {
-                            return "Por favor, digite uma senha válida";
-                          }
-                          if (_passwordController.text !=
-                              _confirmPasswordController.text) {
-                            return "As senhas não coincidem.";
-                          }
-                          return null;
-                        }),
-                  ),
-                  CustomButton(350, "Cadastrar", registerButtonClicked),
-                ],
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: _passwordController,
+                          decoration: textInputDecoration("Senha"),
+                          obscureText: true,
+                          validator: (String? value) {
+                            if (value == null) {
+                              return "Por favor, digite uma senha válida";
+                            }
+                            if (value.length < 8) {
+                              return "Por favor, digite uma senha com pelo menos 8 dígitos";
+                            }
+                            return null;
+                          }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          controller: _confirmPasswordController,
+                          decoration: textInputDecoration("Confirmar Senha"),
+                          obscureText: true,
+                          validator: (String? value) {
+                            if (value == null) {
+                              return "Por favor, digite uma senha válida";
+                            }
+                            if (_passwordController.text !=
+                                _confirmPasswordController.text) {
+                              return "As senhas não coincidem.";
+                            }
+                            return null;
+                          }),
+                    ),
+                    CustomButton(350, "Cadastrar", registerButtonClicked),
+                  ],
+                ),
               ),
             ),
           ),
