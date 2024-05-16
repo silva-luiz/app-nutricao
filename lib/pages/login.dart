@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
   void _showForm() async {
     showModalBottomSheet(
       context: context,
-      elevation: 5,
+      elevation: 1,
       isScrollControlled: true,
       builder: (_) => SafeArea(
         top: true,
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
             key: _modalFormKey,
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

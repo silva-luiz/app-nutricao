@@ -17,9 +17,11 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
     return Column(
       children: <Widget>[
         RadioListTile(
-          title: const Text("Proteína"),
+          title: const Text(
+            "Proteína",
+            style: TextStyle(fontSize: 18),
+          ),
           value: FoodType.proteina,
-          dense: true,
           groupValue: _selectedValue,
           onChanged: (value) {
             setState(
@@ -29,11 +31,12 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
             );
           },
         ),
-
         RadioListTile(
-          title: const Text("Carboidrato"),
+          title: const Text(
+            "Carboidrato",
+            style: TextStyle(fontSize: 18),
+          ),
           value: FoodType.carboidrato,
-          dense: true,
           groupValue: _selectedValue,
           onChanged: (value) {
             setState(
@@ -43,11 +46,12 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
             );
           },
         ),
-
         RadioListTile(
-          title: const Text("Fruta"),
+          title: const Text(
+            "Fruta",
+            style: TextStyle(fontSize: 18),
+          ),
           value: FoodType.fruta,
-          dense: true,
           groupValue: _selectedValue,
           onChanged: (value) {
             setState(
@@ -57,11 +61,12 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
             );
           },
         ),
-
         RadioListTile(
-          title: const Text("Grão"),
+          title: const Text(
+            "Grão",
+            style: TextStyle(fontSize: 18),
+          ),
           value: FoodType.grao,
-          dense: true,
           groupValue: _selectedValue,
           onChanged: (value) {
             setState(
@@ -71,11 +76,12 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
             );
           },
         ),
-
         RadioListTile(
-          title: const Text("Bebida"),
+          title: const Text(
+            "Bebida",
+            style: TextStyle(fontSize: 18),
+          ),
           value: FoodType.bebida,
-          dense: true,
           groupValue: _selectedValue,
           onChanged: (value) {
             setState(
