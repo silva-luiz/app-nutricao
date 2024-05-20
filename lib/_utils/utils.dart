@@ -11,3 +11,7 @@ pickImage(ImageSource source) async {
   }
   print('No Image Selected');
 }
+
+void changeRoute(BuildContext context, route) {
+  Navigator.pushNamed(context, route);
+}

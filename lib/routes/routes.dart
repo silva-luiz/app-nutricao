@@ -1,5 +1,6 @@
 import 'package:app_nutricao/pages/login.dart';
 import 'package:app_nutricao/pages/new_food.dart';
+import 'package:app_nutricao/pages/new_menu.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -7,7 +8,7 @@ class AppRoutes {
     return {
       '/login': (context) => const LoginPage(),
       '/new_food': (context) => const NewFoodPage(),
-      //'/new_menu': (context) => const NewMenuPage(),
+      '/new_menu': (context) => const NewMenuPage(),
     };
   }
 
