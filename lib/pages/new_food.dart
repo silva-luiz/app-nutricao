@@ -65,14 +65,15 @@ class _NewFoodPageState extends State<NewFoodPage> {
                       child: SizedBox(
                         width: 350,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 11.0, bottom: 11.0),
+                          padding:
+                              const EdgeInsets.only(top: 11.0, bottom: 11.0),
                           child: TextFormField(
-                             validator: (value) {
-                        if (value == null || value.length < 2) {
-                          return 'Por favor, digite um alimento válido';
-                        }
-                        return null;
-                      },
+                            validator: (value) {
+                              if (value == null || value.length < 2) {
+                                return 'Por favor, digite um alimento válido';
+                              }
+                              return null;
+                            },
                             controller: _foodNameController,
                             decoration: textInputDecoration("Nome do alimento"),
                           ),
@@ -100,12 +101,12 @@ class _NewFoodPageState extends State<NewFoodPage> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10.0, bottom: 11.0),
                         child: TextFormField(
-                           validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, digite um valor calórico válido';
-                        }
-                        return null;
-                      },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor, digite um valor calórico válido';
+                            }
+                            return null;
+                          },
                           controller: _caloriesController,
                           keyboardType: TextInputType.number,
                           decoration: textInputDecoration("Calorias"),
@@ -115,7 +116,8 @@ class _NewFoodPageState extends State<NewFoodPage> {
                     const SizedBox(
                       width: 20,
                     ),
-                    CustomButton(350, "Adicionar Alimento", registerButtonClicked),
+                    CustomButton(
+                        350, "Adicionar Alimento", registerButtonClicked),
                   ],
                 ),
               )),
@@ -124,13 +126,16 @@ class _NewFoodPageState extends State<NewFoodPage> {
     );
   }
 
-    registerButtonClicked() {
+  registerButtonClicked() {
     if (_formKey.currentState!.validate()) {
       print('Form ok');
     } else {
       print('Form nok');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Por favor, preencha corretamente todos os campos!")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Por favor, preencha corretamente todos os campos!"),
+        ),
+      );
     }
   }
 }
