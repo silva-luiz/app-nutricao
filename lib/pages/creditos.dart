@@ -6,32 +6,44 @@ class CreditsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Text(
-            "Créditos",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 26, color: AppColors.primaryColor),
+    return const SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              "Créditos",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 26,
+                  color: AppColors.primaryColor),
+            ),
           ),
-        ),
-        DevCard(
-            name: 'Carolina Medella',
-            subtitle: 'carrolmedella',
-            photo: 'assets/carol.jpeg'),
-        DevCard(
-            name: 'Luiz Henrique Gomes',
-            subtitle: 'silva-luiz',
-            photo: 'assets/luizera.jpeg'),
-        DevCard(
-            name: 'Nicolas Duque',
-            subtitle: 'Nicolasduquee',
-            photo: 'assets/nicolau.jpeg'),
-        DevCard(
-            name: 'Rafael Bazolli',
-            subtitle: 'rafaelbazolli',
-            photo: 'assets/rafael.jpeg'),
-      ],
+          DevCard(
+              name: 'Carolina Medella',
+              subtitle: 'carrolmedella',
+              photo: 'assets/carol.jpeg'),
+          DevCard(
+              name: 'Gabriela Gasch', subtitle: '', photo: 'assets/gabi.jpeg'),
+          DevCard(
+              name: 'João Vitor Rafagnin',
+              subtitle: '',
+              photo: 'assets/joao.jpeg'),
+          DevCard(
+              name: 'Luiz Henrique Gomes',
+              subtitle: 'silva-luiz',
+              photo: 'assets/luizera.jpeg'),
+          DevCard(
+              name: 'Nicolas Duque',
+              subtitle: 'Nicolasduquee',
+              photo: 'assets/nicolau.jpeg'),
+          DevCard(
+              name: 'Rafael Bazolli',
+              subtitle: 'rafaelbazolli',
+              photo: 'assets/rafael.jpeg'),
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }
