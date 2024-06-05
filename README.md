@@ -18,7 +18,7 @@ Para a construção do projeto, as seguintes documentações foram utilizadas:
 
 ## Integrantes do projeto
 - [Carolina Medella](https://github.com/carrolmedella)
-- João Vitor Rafagnin
+- [João Vitor Rafagnin](https://github.com/jrafagnin)+
 - Gabriela Gasch
 - [Luiz Henrique Gomes](https://github.com/silva-luiz)
 - [Nicolas Duque](https://github.com/Nicolasduquee)
