@@ -27,7 +27,7 @@ class CreditsPage extends StatelessWidget {
               name: 'Gabriela Gasch', subtitle: '', photo: 'assets/gabi.jpeg'),
           DevCard(
               name: 'João Vitor Rafagnin',
-              subtitle: '',
+              subtitle: 'jrafagnin',
               photo: 'assets/joao.jpeg'),
           DevCard(
               name: 'Luiz Henrique Gomes',
