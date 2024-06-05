@@ -13,8 +13,8 @@ O aplicativo usa das seguintes tecnologias para sua construção:
 
 Para a construção do projeto, as seguintes documentações foram utilizadas:
 
-- Flutter
-- SQFlite
+- [Flutter](https://flutter.dev/)
+- [SQFlite](https://pub.dev/packages/sqflite)
 
 ## Integrantes do projeto
 - [Carolina Medella](https://github.com/carrolmedella)
