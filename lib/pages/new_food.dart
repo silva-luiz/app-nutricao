@@ -1,5 +1,9 @@
-import 'package:app_nutricao/components/custom_button.dart';
+import '../data/database_helper.dart';
+
+import '../_utils/utils.dart';
+import '../components/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../_core/color_list.dart';
 import '../_core/input_style.dart';
@@ -14,10 +18,29 @@ class NewFoodPage extends StatefulWidget {
 }
 
 class _NewFoodPageState extends State<NewFoodPage> {
+  final String imagePath = '';
   final TextEditingController _caloriesController = TextEditingController();
   final TextEditingController _foodNameController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> _pickImage() async {
+    String imagePath = await Utils.pickImagePath(ImageSource.gallery);
+    setState(() {
+      imagePath = imagePath;
+    });
+  }
+
+  Future<void> insereRegistroAlimento() async {
+    //_pickImage();
+    await Database.insereRegistro(
+      _foodNameController.text,
+      imagePath,
+      'proteína - mock',
+      _caloriesController.text,
+    );
+    registerButtonClicked();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +76,9 @@ class _NewFoodPageState extends State<NewFoodPage> {
                       padding: EdgeInsets.all(10.0),
                       child: Text(
                         'Insira a imagem do alimento',
-                        style: TextStyle(fontSize: 24),
+                        style: TextStyle(
+                          fontSize: 24,
+                        ),
                       ),
                     ),
                     const Padding(
@@ -65,8 +90,10 @@ class _NewFoodPageState extends State<NewFoodPage> {
                       child: SizedBox(
                         width: 350,
                         child: Padding(
-                          padding:
-                              const EdgeInsets.only(top: 11.0, bottom: 11.0),
+                          padding: const EdgeInsets.only(
+                            top: 11.0,
+                            bottom: 11.0,
+                          ),
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.length < 2) {
@@ -129,6 +156,12 @@ class _NewFoodPageState extends State<NewFoodPage> {
   registerButtonClicked() {
     if (_formKey.currentState!.validate()) {
       print('Form ok');
+      Navigator.popAndPushNamed(context, '/home');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Alimento adicionado com sucesso"),
+        ),
+      );
     } else {
       print('Form nok');
       ScaffoldMessenger.of(context).showSnackBar(

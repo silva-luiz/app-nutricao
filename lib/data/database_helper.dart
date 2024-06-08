@@ -29,7 +29,7 @@ class Database {
         dsc_alm TEXT,
         fto_alm TEXT,
         ctg_alm TEXT,
-        cal_alm INT,
+        cal_alm INT
       )
       """);
   }
@@ -40,6 +40,7 @@ class Database {
         id_cdp INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         dsc_cdp TEXT,
         cat_cdp INTEGER,
+        fk_id_alm INTEGER,
         FOREIGN KEY (fk_id_alm) REFERENCES tbl_alimento(id_alm)
       )
       """);
