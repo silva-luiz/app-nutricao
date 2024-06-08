@@ -36,7 +36,7 @@ class _IndexState extends State<Index> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Ola, bem-vindo!',
+          'Olá, bem-vindo!',
           style: TextStyle(color: AppColors.textLight),
         ),
         actions: [
@@ -81,8 +81,8 @@ class _IndexState extends State<Index> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: AppColors.primaryColor,
-        unselectedIconTheme: IconThemeData(color: AppColors.textGrey),
-        selectedIconTheme: IconThemeData(color: AppColors.primaryColor),
+        unselectedIconTheme: const IconThemeData(color: AppColors.textGrey),
+        selectedIconTheme: const IconThemeData(color: AppColors.primaryColor),
         showSelectedLabels: false,
         onTap: _onItemTapped,
       ),

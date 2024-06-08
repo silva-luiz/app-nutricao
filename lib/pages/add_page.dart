@@ -14,7 +14,7 @@ class AddPage extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(top: 10.0, bottom: 12.0),
             child: Text(
-              "Escolha a opcao que deseja adicionar",
+              "Escolha a opção que deseja adicionar",
               style: TextStyle(fontSize: 20),
             ),
           ),
@@ -26,7 +26,7 @@ class AddPage extends StatelessWidget {
             },
           ),
           SquaredButton(
-            description: "Novo cardapio",
+            description: "Novo cardápio",
             icon: Icons.restaurant_rounded,
             onClick: () {
               changeRoute(context, '/new_menu');
