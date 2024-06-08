@@ -1,5 +1,5 @@
 import 'package:app_nutricao/_core/color_list.dart';
-import 'package:app_nutricao/pages/home.dart';
+import 'package:app_nutricao/pages/initial_home.dart';
 import 'package:app_nutricao/pages/index.dart';
 import 'package:app_nutricao/routes/routes.dart';
 import 'package:flutter/material.dart';
