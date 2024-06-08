@@ -1,3 +1,4 @@
+import 'package:app_nutricao/components/search_type_radio.dart';
 import 'package:app_nutricao/_core/color_list.dart';
 import 'package:flutter/material.dart';
 
@@ -30,13 +31,9 @@ class SearchPage extends StatelessWidget {
               },
               leading: const Icon(Icons.search),
             ),
-            Row(
-                children: [
-                    radius
-                ]
-            )
+            SearchTypeRadio(),
         ],
-    ),
+      ),
     );
   }
 }  
