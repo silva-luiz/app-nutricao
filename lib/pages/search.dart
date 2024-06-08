@@ -7,34 +7,51 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       child: Column(
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(10.0),
             child: Text(
               "Pesquisa",
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 26,
-                  color: AppColors.primaryColor), ),
+                  color: AppColors.primaryColor),
             ),
-            SearchBar(
-              controller: controller,
-              padding: const MaterialStatePropertyAll<EdgeInsets>(
-                  EdgeInsets.symmetric(horizontal: 16.0)),
-              onTap: () {
-                controller.openView();
-              },
-              onChanged: (_) {
-                controller.openView();
-              },
-              leading: const Icon(Icons.search),
-            ),
-            SearchTypeRadio(),
+          ),
+          SearchAnchor(
+            builder: (BuildContext context, SearchController controller) {
+              return SearchBar(
+                controller: controller,
+                padding: const WidgetStatePropertyAll<EdgeInsets>(
+                    EdgeInsets.symmetric(horizontal: 16.0)),
+                onTap: () {
+                  controller.openView();
+                },
+                onChanged: (_) {
+                  controller.openView();
+                },
+                leading: const Icon(Icons.search),
+              );
+            },
+            suggestionsBuilder:
+                (BuildContext context, SearchController controller) {
+              return List<ListTile>.generate(
+                5,
+                (int index) {
+                  final String item = 'item $index';
+                  return ListTile(
+                    title: Text(item),
+                    onTap: () {},
+                  );
+                },
+              );
+            },
+          ),
+          const SearchTypeRadio(),
         ],
       ),
     );
   }
-}  
-
+}
