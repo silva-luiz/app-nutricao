@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController();
 
   void _exibeTodosRegistros() async {
-    final data = await Database.exibeTodosRegistros();
+    final data = await Database.exibeTodosRegistrosUsers();
     setState(() {
       _registros = data;
     });
