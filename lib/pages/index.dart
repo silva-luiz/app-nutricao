@@ -2,6 +2,7 @@ import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/pages/add_page.dart';
 import 'package:app_nutricao/pages/creditos.dart';
 import 'package:app_nutricao/pages/initial_home.dart';
+import 'package:app_nutricao/pages/search.dart';
 import 'package:flutter/material.dart';
 
 class Index extends StatefulWidget {
@@ -13,10 +14,8 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-   InitialHomePage(),
+    InitialHomePage(),
     SearchPage(),
     AddPage(),
     CreditsPage(),
@@ -38,7 +37,9 @@ class _IndexState extends State<Index> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/login');
+            },
             icon: const Padding(
               padding: EdgeInsets.only(right: 10),
               child: Icon(

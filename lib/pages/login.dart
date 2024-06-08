@@ -40,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   loginButtonClicked() {
     if (_formkey.currentState!.validate()) {
+      Navigator.pushNamed(context, '/home');
       print('Form OK!');
     } else {
       print('Form NOK!');
