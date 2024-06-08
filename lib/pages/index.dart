@@ -1,7 +1,7 @@
 import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/pages/add_page.dart';
 import 'package:app_nutricao/pages/creditos.dart';
-import 'package:app_nutricao/pages/home.dart';
+import 'package:app_nutricao/pages/initial_home.dart';
 import 'package:flutter/material.dart';
 
 class Index extends StatefulWidget {
@@ -16,11 +16,8 @@ class _IndexState extends State<Index> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-   HomePage(),
-    Text(
-      'Index 1: Search',
-      style: optionStyle,
-    ),
+   InitialHomePage(),
+    SearchPage(),
     AddPage(),
     CreditsPage(),
   ];
