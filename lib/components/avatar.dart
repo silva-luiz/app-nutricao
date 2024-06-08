@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:app_nutricao/_utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class AvatarImage extends StatefulWidget {
   const AvatarImage({super.key});
