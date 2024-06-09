@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
       decoration: BoxDecoration(
         // Aplicando uma imagem de fundo
         image: DecorationImage(
-          image: AssetImage("assets/background.jpg"),
+          image: const AssetImage("assets/background.jpg"),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.4),  // Reduz a opacidade da imagem para 50%
@@ -42,8 +42,9 @@ class HomePage extends StatelessWidget {
                 }),
               )
             ],
+
           ),
         ),
-    );
+      );
   }
 }

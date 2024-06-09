@@ -4,6 +4,7 @@ import 'package:app_nutricao/pages/creditos.dart';
 import 'package:app_nutricao/pages/initial_home.dart';
 import 'package:app_nutricao/pages/search.dart';
 import 'package:flutter/material.dart';
+import 'package:app_nutricao/_utils/constants.dart' as constants;
 
 class Index extends StatefulWidget {
   const Index({super.key});
@@ -31,9 +32,9 @@ class _IndexState extends State<Index> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Olá, bem-vindo!',
-          style: TextStyle(color: AppColors.textLight),
+        title: Text(
+          'Olá ${constants.nomeUsuario ?? 'Amigo'}!',
+          style: const TextStyle(color: AppColors.textLight),
         ),
         actions: [
           IconButton(

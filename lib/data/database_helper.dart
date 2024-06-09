@@ -148,6 +148,48 @@ class Database {
     ''', ['%$nomeAlimento%']);
   }
 
+  // VALIDAÇÕES DE LOGIN
+  // Exibir usuarios no console(somente para controle)
+  static Future<void> imprimirUsuariosNoPrompt() async {
+    final List<Map<String, dynamic>> users = await exibeTodosRegistrosUsers();
+
+    for (var user in users) {
+      print('${user['name']} | ${user['email']} | ${user['password']}');
+    }
+  }
+
+  // Verifica se o login é válido
+  static Future<bool> verificaLogin(String email, String senha) async {
+    final database = await Database.database();
+
+    final List<Map<String, dynamic>> results = await database.query(
+      'users',
+      columns: ['id', 'email', 'password'],
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, senha],
+    );
+
+    return results.isNotEmpty;
+  }
+
+  // Retornar usuario logado para ser usado no menu principal
+  static Future<String?> getNomeUsuario(String email) async {
+    final database = await Database.database();
+
+    final List<Map<String, dynamic>> results = await database.query(
+      'users',
+      columns: ['name'],
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first['name'] as String?;
+    } else {
+      return null;
+    }
+  }
+
   // ATUALIZAÇÃO DE REGISTROS
   // Atualizar registros na tabela 'users'
   static Future<int> atualizaRegistro(int id, String name, String email,
@@ -233,5 +275,17 @@ class Database {
       debugPrint(
           "Ocorreu algum erro ao remover o registro da tabela 'tbl_cardapio': $e");
     }
+  }
+
+  // Verificar se o e-mail já está registrado - Usado no cadastro (loginPage)
+  static Future<bool> isEmailRegistered(String email) async {
+    final database = await Database.database();
+    final result = await database.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    return result.isNotEmpty;
   }
 }
