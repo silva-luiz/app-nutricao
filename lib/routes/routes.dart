@@ -8,7 +8,7 @@ class AppRoutes {
     return {
       '/login': (context) => const LoginPage(),
       '/new_food': (context) => const NewFoodPage(),
-      '/new_menu': (context) => const NewMenuPage(),
+      '/new_menu': (context) => NewMenuPage(),
     };
   }
 
