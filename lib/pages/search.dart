@@ -24,8 +24,9 @@ class SearchPage extends StatelessWidget {
             builder: (BuildContext context, SearchController controller) {
               return SearchBar(
                 controller: controller,
-                padding: const WidgetStatePropertyAll<EdgeInsets>(
-                    EdgeInsets.symmetric(horizontal: 16.0)),
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(horizontal: 16.0),
+                ),
                 onTap: () {
                   controller.openView();
                 },

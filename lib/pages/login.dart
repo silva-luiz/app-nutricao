@@ -4,6 +4,7 @@ import 'package:app_nutricao/components/avatar.dart';
 import 'package:app_nutricao/components/custom_button.dart';
 import 'package:app_nutricao/data/database_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:app_nutricao/_utils/constants.dart' as constants;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,26 +37,80 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _registros = data;
     });
+
+    await Database.imprimirUsuariosNoPrompt();
   }
 
-  loginButtonClicked() {
-    if (_formkey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/home');
-      print('Form OK!');
-    } else {
-      print('Form NOK!');
+  // Realizar login
+  void loginButtonClicked() {
+    String email = _loginEmailController.text.trim();
+    String password = _loginPasswordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Por favor, preencha corretamente todos os campos."),
+          content: Text('Por favor, preencha todos os campos.'),
         ),
       );
+      return;
     }
+
+    Future<void> login() async {
+      bool loginValido = await Database.verificaLogin(email, password);
+
+      if (loginValido) {
+        String? nomeUsuario = await Database.getNomeUsuario(email);
+        constants.nomeUsuario = nomeUsuario;
+        print(constants.nomeUsuario);
+
+        Navigator.pushNamed(context, '/home', arguments: nomeUsuario);
+        _loginEmailController.clear();
+        _loginPasswordController.clear();
+        print('Login realizado com sucesso.');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('E-mail ou senha inválidos.'),
+          ),
+        );
+        _loginPasswordController.clear();
+      }
+    }
+
+    login();
   }
 
-  registerButtonClicked() async {
+  // Validar novo registro de cadastro
+  void registerButtonClicked() async {
     if (_modalFormKey.currentState!.validate()) {
-      await _insereRegistro();
-      Navigator.of(context).pop();
+      final emailExiste =
+          await Database.isEmailRegistered(_emailController.text);
+
+      if (emailExiste) {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Erro'),
+              content: const Text('O e-mail já está cadastrado.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        await _insereRegistro();
+        if (!mounted) return;
+        Navigator.of(context).pop();
+        print('Form OK!');
+      }
     } else {
       print('Form NOK!');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -68,9 +123,20 @@ class _LoginPageState extends State<LoginPage> {
 
   // Insere um novo registro
   Future<void> _insereRegistro() async {
-    await Database.insereRegistro(_nameController.text, _emailController.text,
-        _birthdateController.text, _passwordController.text);
+    await Database.insereRegistro(
+      _nameController.text,
+      _emailController.text,
+      _birthdateController.text,
+      _passwordController.text,
+    );
     _exibeTodosRegistros();
+
+    // Limpa os campos de texto após a inserção
+    _nameController.clear();
+    _emailController.clear();
+    _birthdateController.clear();
+    _passwordController.clear();
+    _confirmPasswordController.clear();
   }
 
   @override
@@ -102,7 +168,8 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           width: 350,
                           child: TextFormField(
-                              decoration: textInputDecoration("Email"),
+                              decoration: textInputDecoration("E-mail"),
+                              controller: _loginEmailController,
                               keyboardType: TextInputType.emailAddress,
                               validator: (String? value) {
                                 if (value == null || !value.contains("@")) {
@@ -116,6 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                           width: 350,
                           child: TextFormField(
                               decoration: textInputDecoration("Senha"),
+                              controller: _loginPasswordController,
                               obscureText: true,
                               validator: (String? value) {
                                 if (value == null || value.length < 8) {
