@@ -32,6 +32,7 @@ class _IndexState extends State<Index> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Olá ${constants.nomeUsuario ?? 'Amigo'}!',
           style: const TextStyle(color: AppColors.textLight),
