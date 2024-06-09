@@ -13,9 +13,9 @@ class AppRoutes {
       '/home': (context) => const Index(),
       '/login': (context) => const LoginPage(),
       '/initial_home': (context) => const InitialHomePage(),
-      '/add_page':(context) => const AddPage(),
+      '/add_page': (context) => const AddPage(),
       '/new_food': (context) => const NewFoodPage(),
-      '/new_menu': (context) => const NewMenuPage(),
+      '/new_menu': (context) => NewMenuPage(),
       '/search': (context) => const SearchPage(),
     };
   }

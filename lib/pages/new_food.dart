@@ -1,36 +1,36 @@
 import '../data/database_helper.dart';
-
+ 
 import '../_utils/utils.dart';
 import '../components/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+ 
 import '../_core/color_list.dart';
 import '../_core/input_style.dart';
 import '../components/avatar.dart';
 import '../components/food_type_radio.dart';
-
+ 
 class NewFoodPage extends StatefulWidget {
   const NewFoodPage({super.key});
-
+ 
   @override
   State<NewFoodPage> createState() => _NewFoodPageState();
 }
-
+ 
 class _NewFoodPageState extends State<NewFoodPage> {
   final String imagePath = '';
   final TextEditingController _caloriesController = TextEditingController();
   final TextEditingController _foodNameController = TextEditingController();
-
+ 
   final _formKey = GlobalKey<FormState>();
-
+ 
   Future<void> _pickImage() async {
     String imagePath = await Utils.pickImagePath(ImageSource.gallery);
     setState(() {
       imagePath = imagePath;
     });
   }
-
+ 
   Future<void> insereRegistroAlimento() async {
     //_pickImage();
     await Database.insereRegistro(
@@ -41,7 +41,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
     );
     registerButtonClicked();
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,7 +152,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
       ),
     );
   }
-
+ 
   registerButtonClicked() {
     if (_formKey.currentState!.validate()) {
       print('Form ok');

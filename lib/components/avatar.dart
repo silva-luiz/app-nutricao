@@ -2,8 +2,10 @@ import 'dart:typed_data';
  
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:app_nutricao/_utils/utils.dart'; // Verifique se o import está correto
  
+
 class AvatarImage extends StatefulWidget {
   const AvatarImage({super.key}); // Corrigido super.key para Key? key
  

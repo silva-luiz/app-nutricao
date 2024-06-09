@@ -26,18 +26,18 @@ class HomePage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  'Bem-vindo ao [NOME DO APP]',
+                  'Bem-vindo ao Nutriplan',
                   style: TextStyle(fontSize: 26, color: AppColors.textDark),
                 ),
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text('Para iniciar, crie seu primeiro cardapio',
+                child: Text('Para iniciar, crie seu primeiro cardápio',
                     style: TextStyle(fontSize: 18, color: AppColors.primaryColor, fontWeight: FontWeight.w700)),
               ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: CustomButton(200, "Novo Cardapio", () {
+                child: CustomButton(200, "Novo Cardápio", () {
                   print("ok");
                 }),
               )
