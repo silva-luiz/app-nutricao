@@ -1,4 +1,5 @@
 import 'package:app_nutricao/_core/color_list.dart';
+import 'package:app_nutricao/components/logout_dialog.dart';
 import 'package:app_nutricao/pages/add_page.dart';
 import 'package:app_nutricao/pages/creditos.dart';
 import 'package:app_nutricao/pages/initial_home.dart';
@@ -37,19 +38,8 @@ class _IndexState extends State<Index> {
           'Olá ${constants.nomeUsuario ?? 'Amigo'}!',
           style: const TextStyle(color: AppColors.textLight),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/login');
-            },
-            icon: const Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: Icon(
-                Icons.logout_outlined,
-                color: AppColors.textLight,
-              ),
-            ),
-          ),
+        actions: const [
+         LogoutDialog(),
         ],
         backgroundColor: AppColors.primaryColor,
       ),
