@@ -7,6 +7,7 @@ class AppColors {
   static const Color dangerColor = Color.fromARGB(255, 194, 0, 0);
   static const Color infoColor = Color.fromARGB(255, 0, 102, 255);
   static const Color textLight = Color.fromARGB(255, 255, 255, 255);
+  static const Color white = Color.fromARGB(255, 255, 255, 255);
   static const Color textGrey = Color.fromARGB(255, 102, 102, 102);
   static const Color textDark = Color.fromARGB(255, 0, 0, 0);
 
