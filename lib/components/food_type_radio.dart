@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FoodTypeRadio extends StatefulWidget {
-  const FoodTypeRadio({super.key});
+  final Function(FoodType) onChanged;
+
+  const FoodTypeRadio({super.key, required this.onChanged});
 
   @override
   State<FoodTypeRadio> createState() => _FoodTypeRadioState();
@@ -24,11 +26,10 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
           value: FoodType.proteina,
           groupValue: _selectedValue,
           onChanged: (value) {
-            setState(
-              () {
-                _selectedValue = value;
-              },
-            );
+            setState(() {
+              _selectedValue = value;
+            });
+            widget.onChanged(value!);
           },
         ),
         RadioListTile(
@@ -39,11 +40,10 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
           value: FoodType.carboidrato,
           groupValue: _selectedValue,
           onChanged: (value) {
-            setState(
-              () {
-                _selectedValue = value;
-              },
-            );
+            setState(() {
+              _selectedValue = value;
+            });
+            widget.onChanged(value!);
           },
         ),
         RadioListTile(
@@ -54,11 +54,10 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
           value: FoodType.fruta,
           groupValue: _selectedValue,
           onChanged: (value) {
-            setState(
-              () {
-                _selectedValue = value;
-              },
-            );
+            setState(() {
+              _selectedValue = value;
+            });
+            widget.onChanged(value!);
           },
         ),
         RadioListTile(
@@ -69,11 +68,10 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
           value: FoodType.grao,
           groupValue: _selectedValue,
           onChanged: (value) {
-            setState(
-              () {
-                _selectedValue = value;
-              },
-            );
+            setState(() {
+              _selectedValue = value;
+            });
+            widget.onChanged(value!);
           },
         ),
         RadioListTile(
@@ -84,11 +82,10 @@ class _FoodTypeRadioState extends State<FoodTypeRadio> {
           value: FoodType.bebida,
           groupValue: _selectedValue,
           onChanged: (value) {
-            setState(
-              () {
-                _selectedValue = value;
-              },
-            );
+            setState(() {
+              _selectedValue = value;
+            });
+            widget.onChanged(value!);
           },
         ),
       ],

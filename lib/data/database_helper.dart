@@ -17,6 +17,7 @@ class Database {
         email TEXT,
         birthdate TEXT,
         password TEXT,
+        avatar TEXT,
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
       """);
@@ -58,15 +59,16 @@ class Database {
 
   // INSERIR REGISTROS
   // Insere registro em 'users'
-  static Future<int> insereRegistro(
-      String name, String email, String birthdate, String password) async {
+  static Future<int> insereRegistro(String name, String email, String birthdate,
+      String password, String avatar) async {
     final database = await Database.database();
 
     final data = {
       'name': name,
       'email': email,
       'birthdate': birthdate,
-      'password': password
+      'password': password,
+      'avatar': avatar
     };
 
     final id = await database.insert('users', data,
@@ -128,6 +130,17 @@ class Database {
     return database.query('tbl_cardapio', orderBy: 'id_cdp');
   }
 
+  // Exibir alimentos no console
+  static Future<void> imprimirAlimentosNoPrompt() async {
+    final List<Map<String, dynamic>> alimentos =
+        await exibeTodosRegistrosAlimento();
+
+    for (var alimento in alimentos) {
+      print(
+          '${alimento['dsc_alm']} | ${alimento['fto_alm']} | ${alimento['ctg_alm']} | ${alimento['cal_alm']}');
+    }
+  }
+
   // Buscar por nome na 'tbl_alimento'
   static Future<List<Map<String, dynamic>>> buscaAlimentoPorNome(
       String nomeAlimento) async {
@@ -154,7 +167,8 @@ class Database {
     final List<Map<String, dynamic>> users = await exibeTodosRegistrosUsers();
 
     for (var user in users) {
-      print('${user['name']} | ${user['email']} | ${user['password']}');
+      print(
+          '${user['name']} | ${user['email']} | ${user['password']} | ${user['avatar']}');
     }
   }
 
@@ -193,7 +207,7 @@ class Database {
   // ATUALIZAÇÃO DE REGISTROS
   // Atualizar registros na tabela 'users'
   static Future<int> atualizaRegistro(int id, String name, String email,
-      String password, String birthdate) async {
+      String password, String avatar, String birthdate) async {
     final database = await Database.database();
 
     final data = {
@@ -201,6 +215,7 @@ class Database {
       'email': email,
       'password': password,
       'birthdate': birthdate,
+      'avatar': avatar,
       'createdAt': DateTime.now().toString()
     };
 
@@ -284,6 +299,18 @@ class Database {
       'users',
       where: 'email = ?',
       whereArgs: [email],
+    );
+
+    return result.isNotEmpty;
+  }
+
+  // Verificar se o alimento ja está registrado
+  static Future<bool> isFoodRegistered(String foodName) async {
+    final database = await Database.database();
+    final result = await database.query(
+      'tbl_alimento',
+      where: 'dsc_alm = ?',
+      whereArgs: [foodName],
     );
 
     return result.isNotEmpty;

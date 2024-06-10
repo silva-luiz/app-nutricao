@@ -1,47 +1,66 @@
-import '../data/database_helper.dart';
- 
-import '../_utils/utils.dart';
-import '../components/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
- 
+
 import '../_core/color_list.dart';
 import '../_core/input_style.dart';
 import '../components/avatar.dart';
+import '../components/custom_button.dart';
 import '../components/food_type_radio.dart';
- 
+import '../data/database_helper.dart';
+
 class NewFoodPage extends StatefulWidget {
   const NewFoodPage({super.key});
- 
+
   @override
   State<NewFoodPage> createState() => _NewFoodPageState();
 }
- 
+
 class _NewFoodPageState extends State<NewFoodPage> {
-  final String imagePath = '';
+  String imagePath = '';
+  String selectedFoodType = 'proteina';
   final TextEditingController _caloriesController = TextEditingController();
   final TextEditingController _foodNameController = TextEditingController();
- 
+
   final _formKey = GlobalKey<FormState>();
- 
-  Future<void> _pickImage() async {
-    String imagePath = await Utils.pickImagePath(ImageSource.gallery);
+
+  void _updateImagePath(String newPath) {
     setState(() {
-      imagePath = imagePath;
+      imagePath = newPath;
     });
   }
- 
-  Future<void> insereRegistroAlimento() async {
-    //_pickImage();
-    await Database.insereRegistro(
-      _foodNameController.text,
-      imagePath,
-      'proteína - mock',
-      _caloriesController.text,
-    );
-    registerButtonClicked();
+
+  void _onFoodTypeChanged(FoodType foodType) {
+    setState(() {
+      selectedFoodType = foodType.toString().split('.').last;
+    });
   }
- 
+
+  Future<void> insereRegistroAlimento() async {
+    if (_formKey.currentState!.validate()) {
+      String foodName = _foodNameController.text;
+
+      final alimentoExiste = await Database.isFoodRegistered(foodName);
+      print(alimentoExiste);
+
+      if (alimentoExiste) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Este alimento já está registrado!"),
+          ),
+        );
+      } else {
+        await Database.insereRegistroAlimento(
+          foodName,
+          imagePath,
+          selectedFoodType, // Use a categoria selecionada
+          int.parse(_caloriesController.text),
+        );
+
+        await Database.imprimirAlimentosNoPrompt();
+        registerButtonClicked();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,9 +100,12 @@ class _NewFoodPageState extends State<NewFoodPage> {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: AvatarImage(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: AvatarImage(
+                        onImagePathChanged:
+                            _updateImagePath, // Adicione o callback aqui
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -113,7 +135,9 @@ class _NewFoodPageState extends State<NewFoodPage> {
                         fontSize: 22,
                       ),
                     ),
-                    const FoodTypeRadio(),
+                    FoodTypeRadio(
+                        onChanged:
+                            _onFoodTypeChanged), // Utilize o callback aqui
                     const SizedBox(
                       height: 20,
                     ),
@@ -144,7 +168,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
                       width: 20,
                     ),
                     CustomButton(
-                        350, "Adicionar Alimento", registerButtonClicked),
+                        350, "Adicionar Alimento", insereRegistroAlimento),
                   ],
                 ),
               )),
@@ -152,8 +176,8 @@ class _NewFoodPageState extends State<NewFoodPage> {
       ),
     );
   }
- 
-  registerButtonClicked() {
+
+  void registerButtonClicked() {
     if (_formKey.currentState!.validate()) {
       print('Form ok');
       Navigator.popAndPushNamed(context, '/home');

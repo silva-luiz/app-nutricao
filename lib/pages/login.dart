@@ -123,12 +123,8 @@ class _LoginPageState extends State<LoginPage> {
 
   // Insere um novo registro
   Future<void> _insereRegistro() async {
-    await Database.insereRegistro(
-      _nameController.text,
-      _emailController.text,
-      _birthdateController.text,
-      _passwordController.text,
-    );
+    await Database.insereRegistro(_nameController.text, _emailController.text,
+        _birthdateController.text, _passwordController.text, imagePath);
     _exibeTodosRegistros();
 
     // Limpa os campos de texto após a inserção
@@ -137,6 +133,13 @@ class _LoginPageState extends State<LoginPage> {
     _birthdateController.clear();
     _passwordController.clear();
     _confirmPasswordController.clear();
+  }
+
+  String imagePath = '';
+  void _updateImagePath(String newPath) {
+    setState(() {
+      imagePath = newPath;
+    });
   }
 
   @override
@@ -154,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                     end: Alignment.topCenter,
                     begin: Alignment.bottomCenter,
                     colors: [
-                      AppColors.gradientTopColor,
+                      Color.fromARGB(255, 201, 201, 201),
                       AppColors.gradientBottomColor
                     ]),
               ),
@@ -182,15 +185,21 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           width: 350,
                           child: TextFormField(
-                              decoration: textInputDecoration("Senha"),
-                              controller: _loginPasswordController,
-                              obscureText: true,
-                              validator: (String? value) {
-                                if (value == null || value.length < 8) {
-                                  return "Por favor, digite uma senha válida";
-                                }
-                                return null;
-                              }),
+                            decoration: textInputDecoration("Senha"),
+                            controller: _loginPasswordController,
+                            obscureText: true,
+                            validator: (String? value) {
+                              if (value == null || value.length < 8) {
+                                return "Por favor, digite uma senha válida";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction
+                                .done, // Define a ação do teclado para "Done"
+                            onFieldSubmitted: (value) {
+                              loginButtonClicked(); // Chama a função de login quando o Enter é pressionado
+                            },
+                          ),
                         ),
                         CustomButton(350, "Entrar", loginButtonClicked),
                         Row(
@@ -255,7 +264,10 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const AvatarImage(),
+                    AvatarImage(
+                      onImagePathChanged:
+                          _updateImagePath, // Adicione o callback aqui
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
