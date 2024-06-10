@@ -2,6 +2,7 @@ import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/_core/input_style.dart';
 import 'package:app_nutricao/components/custom_button.dart';
 import 'package:app_nutricao/components/logout_dialog.dart';
+import 'package:app_nutricao/data/database_helper.dart';
 import 'package:flutter/material.dart';
 
 class NewMenuPage extends StatefulWidget {
@@ -25,36 +26,52 @@ class _NewMenuPageState extends State<NewMenuPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  List<String> allItems = [
-    'Maçã',
-    'Laranja',
-    'Banana',
-    'Uva',
-    'Leite',
-    'Suco de laranja',
-    'Suco de limão',
-    'Arroz',
-    'Lentilha',
-    'Grão de bico',
-    'Feijão',
-    'Batata doce',
-    'Batata inglesa',
-    'Carne moída',
-    'Carne de porco',
-    'Filé de frango Grelhado',
-    'Ovo',
-    'Peixe',
-  ];
+  Future<void> fetchAllItems() async {
+    final items = await Database.exibeTodosRegistrosAlimento();
+    setState(() {
+      allItems = items.map((item) => item['dsc_alm'].toString()).toList();
+    });
+  }
+
+  Future<void> searchBreakfast(String query) async {
+    final results = await Database.buscaAlimentoPorNome(query);
+    setState(() {
+      if (query.isEmpty) {
+        searchBreakfastResults.clear();
+      } else {
+        searchBreakfastResults =
+            results.map((item) => item['dsc_alm'].toString()).toList();
+      }
+    });
+  }
+
+  Future<void> searchLunch(String query) async {
+    final results = await Database.buscaAlimentoPorNome(query);
+    setState(() {
+      if (query.isEmpty) {
+        searchLunchResults.clear();
+      } else {
+        searchLunchResults =
+            results.map((item) => item['dsc_alm'].toString()).toList();
+      }
+    });
+  }
+
+  Future<void> searchDinner(String query) async {
+    final results = await Database.buscaAlimentoPorNome(query);
+    setState(() {
+      if (query.isEmpty) {
+        searchDinnerResults.clear();
+      } else {
+        searchDinnerResults =
+            results.map((item) => item['dsc_alm'].toString()).toList();
+      }
+    });
+  }
 
   registerMenu() {
     if (_formKey.currentState!.validate()) {
       print('Form ok');
-      // Navigator.pushNamed(context, '/index');
-      //  ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text("Cardápio criado com sucesso!"),
-      //   ),
-      // );
     } else {
       print('Form nok');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -63,6 +80,14 @@ class _NewMenuPageState extends State<NewMenuPage> {
         ),
       );
     }
+  }
+
+  List<String> allItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAllItems();
   }
 
   @override
@@ -81,14 +106,12 @@ class _NewMenuPageState extends State<NewMenuPage> {
       body: SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
-            setState(() {
-              searchBreakfastResults = [];
-              searchLunchResults = [];
-              searchDinnerResults = [];
-              _searchBreakfastController.clear();
-              _searchLunchController.clear();
-              _searchDinnerController.clear();
-            });
+            _searchBreakfastController.clear();
+            _searchLunchController.clear();
+            _searchDinnerController.clear();
+            searchBreakfastResults.clear();
+            searchLunchResults.clear();
+            searchDinnerResults.clear();
           },
           child: Form(
             key: _formKey,
@@ -195,15 +218,18 @@ class _NewMenuPageState extends State<NewMenuPage> {
                   child: ListView.builder(
                     itemCount: searchBreakfastResults.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(searchBreakfastResults[index]),
-                        onTap: () {
-                          setState(() {
-                            selectedBreakfastItems
-                                .add(searchBreakfastResults[index]);
-                            _searchBreakfastController.clear();
-                          });
-                        },
+                      return Container(
+                        color: Colors.grey[200],
+                        child: ListTile(
+                          title: Text(searchBreakfastResults[index]),
+                          onTap: () {
+                            setState(() {
+                              selectedBreakfastItems
+                                  .add(searchBreakfastResults[index]);
+                              _searchBreakfastController.clear();
+                            });
+                          },
+                        ),
                       );
                     },
                   ),
@@ -285,14 +311,17 @@ class _NewMenuPageState extends State<NewMenuPage> {
                   child: ListView.builder(
                     itemCount: searchLunchResults.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(searchLunchResults[index]),
-                        onTap: () {
-                          setState(() {
-                            selectedLunchItems.add(searchLunchResults[index]);
-                            _searchLunchController.clear();
-                          });
-                        },
+                      return Container(
+                        color: Colors.grey[200],
+                        child: ListTile(
+                          title: Text(searchBreakfastResults[index]),
+                          onTap: () {
+                            setState(() {
+                              selectedLunchItems.add(searchLunchResults[index]);
+                              _searchLunchController.clear();
+                            });
+                          },
+                        ),
                       );
                     },
                   ),
@@ -374,14 +403,18 @@ class _NewMenuPageState extends State<NewMenuPage> {
                   child: ListView.builder(
                     itemCount: searchDinnerResults.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(searchDinnerResults[index]),
-                        onTap: () {
-                          setState(() {
-                            selectedDinnerItems.add(searchDinnerResults[index]);
-                            _searchDinnerController.clear();
-                          });
-                        },
+                      return Container(
+                        color: Colors.grey[200],
+                        child: ListTile(
+                          title: Text(searchDinnerResults[index]),
+                          onTap: () {
+                            setState(() {
+                              selectedDinnerItems
+                                  .add(searchDinnerResults[index]);
+                              _searchDinnerController.clear();
+                            });
+                          },
+                        ),
                       );
                     },
                   ),

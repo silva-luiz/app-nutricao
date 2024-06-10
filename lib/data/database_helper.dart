@@ -120,7 +120,7 @@ class Database {
   static Future<List<Map<String, dynamic>>>
       exibeTodosRegistrosAlimento() async {
     final database = await Database.database();
-    return database.query('tbl_alimento', orderBy: 'id_alm');
+    return database.query('tbl_alimento', orderBy: 'dsc_alm');
   }
 
   // Retorna todos os registros da tabela 'tbl_cardapio'
@@ -138,6 +138,17 @@ class Database {
     for (var alimento in alimentos) {
       print(
           '${alimento['dsc_alm']} | ${alimento['fto_alm']} | ${alimento['ctg_alm']} | ${alimento['cal_alm']}');
+    }
+  }
+
+  // Exibir cardapios no console
+  static Future<void> imprimirCardapiosNoPrompt() async {
+    final List<Map<String, dynamic>> cardapios =
+        await exibeTodosRegistrosAlimento();
+
+    for (var cardapio in cardapios) {
+      print(
+          '${cardapio['dsc_alm']} | ${cardapio['fto_alm']} | ${cardapio['id_alm']}');
     }
   }
 
