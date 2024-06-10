@@ -1,26 +1,36 @@
 import 'dart:typed_data';
- 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:app_nutricao/_utils/utils.dart'; // Verifique se o import está correto
- 
+import '../_utils/utils.dart'; // Ajuste o caminho conforme necessário
 
 class AvatarImage extends StatefulWidget {
-  const AvatarImage({super.key}); // Corrigido super.key para Key? key
- 
+  final Function(String)? onImagePathChanged; // Torna o callback opcional
+
+  const AvatarImage({super.key, this.onImagePathChanged});
+
   @override
   State<AvatarImage> createState() => _AvatarImageState();
 }
- 
+
 class _AvatarImageState extends State<AvatarImage> {
   Uint8List? _image;
- 
+  String imagePath = '';
+
   void selectImage() async {
-    List<int>? imgBytes = await Utils.pickImageAsBytes(
-        ImageSource.gallery); // Corrigido para aceitar List<int>?
- 
-    if (imgBytes != null) {
+    // Use apenas uma chamada para obter a imagem e os bytes
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        imagePath = image.path;
+        if (widget.onImagePathChanged != null) {
+          widget.onImagePathChanged!(
+              imagePath); // Verifica se o callback não é nulo antes de chamá-lo
+        }
+      });
+
+      final imgBytes = await image.readAsBytes();
       setState(() {
         _image = Uint8List.fromList(
             imgBytes); // Convertendo List<int> para Uint8List
@@ -29,7 +39,7 @@ class _AvatarImageState extends State<AvatarImage> {
       print('No image selected'); // Caso não haja imagem selecionada
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,4 +69,3 @@ class _AvatarImageState extends State<AvatarImage> {
     );
   }
 }
- 
