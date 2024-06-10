@@ -1,6 +1,7 @@
 import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/_core/input_style.dart';
 import 'package:app_nutricao/components/custom_button.dart';
+import 'package:app_nutricao/components/logout_dialog.dart';
 import 'package:flutter/material.dart';
 
 class NewMenuPage extends StatefulWidget {
@@ -72,17 +73,8 @@ class _NewMenuPageState extends State<NewMenuPage> {
           'Novo cardápio',
           style: TextStyle(color: AppColors.textLight),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: Icon(
-                Icons.logout_outlined,
-                color: AppColors.textLight,
-              ),
-            ),
-          ),
+        actions: const [
+          LogoutDialog(),
         ],
         backgroundColor: AppColors.primaryColor,
       ),

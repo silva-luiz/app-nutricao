@@ -1,3 +1,9 @@
+import 'package:app_nutricao/components/logout_dialog.dart';
+
+import '../data/database_helper.dart';
+ 
+import '../_utils/utils.dart';
+import '../components/custom_button.dart';
 import 'package:flutter/material.dart';
 
 import '../_core/color_list.dart';
@@ -69,17 +75,8 @@ class _NewFoodPageState extends State<NewFoodPage> {
           'Ola, bem-vindo!',
           style: TextStyle(color: AppColors.textLight),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: Icon(
-                Icons.logout_outlined,
-                color: AppColors.textLight,
-              ),
-            ),
-          ),
+        actions: const [
+          LogoutDialog(),
         ],
         backgroundColor: AppColors.primaryColor,
       ),

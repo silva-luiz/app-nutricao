@@ -266,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     AvatarImage(
                       onImagePathChanged:
-                          _updateImagePath, // Adicione o callback aqui
+                          _updateImagePath,
                     ),
                     const SizedBox(
                       height: 10,
