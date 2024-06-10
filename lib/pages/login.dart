@@ -161,13 +161,23 @@ class _LoginPageState extends State<LoginPage> {
                       AppColors.gradientBottomColor
                     ]),
               ),
-              child: Center(
+              child: Align(
+                alignment: Alignment.topCenter,
                 child: SingleChildScrollView(
                   child: Form(
                     key: _formkey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const SizedBox(height: 100),
+                        Image.asset(
+                          'assets/icon-android.png',
+                          width: 200,
+                          height: 200,
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
                         SizedBox(
                           width: 350,
                           child: TextFormField(
@@ -265,8 +275,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 10,
                     ),
                     AvatarImage(
-                      onImagePathChanged:
-                          _updateImagePath,
+                      onImagePathChanged: _updateImagePath,
                     ),
                     const SizedBox(
                       height: 10,
