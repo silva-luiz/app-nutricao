@@ -9,8 +9,8 @@ class AppColors {
   static const Color textLight = Color.fromARGB(255, 255, 255, 255);
   static const Color white = Color.fromARGB(255, 255, 255, 255);
   static const Color textGrey = Color.fromARGB(255, 102, 102, 102);
+  static const Color greyBackground = Color.fromARGB(255, 175, 170, 170);
   static const Color textDark = Color.fromARGB(255, 0, 0, 0);
-
   static const Color gradientTopColor = Color.fromARGB(255, 202, 253, 195);
   static const Color gradientBottomColor = Color.fromARGB(255, 11, 87, 1);
 
