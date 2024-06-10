@@ -228,99 +228,102 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       elevation: 1,
       isScrollControlled: true,
-      builder: (_) => SafeArea(
-        top: true,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _modalFormKey,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 20,
+      builder: (_) => SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: 15,
+          right: 15,
+          // Isso impedirá que o teclado programável cubra os campos de texto
+          bottom: MediaQuery.of(context).viewInsets.bottom + 90,
+        ),
+        child: Form(
+          key: _modalFormKey,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Cadastrar novo Usuário',
+                      style: TextStyle(
+                          fontSize: 46,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'Cadastrar novo Usuário',
-                        style: TextStyle(
-                            fontSize: 52,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primaryColor),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const AvatarImage(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                          controller: _nameController,
-                          decoration: textInputDecoration("Nome"),
-                          validator: (String? value) {
-                            if (value == null || value.length < 3) {
-                              return "Por favor, digite um nome válido";
-                            }
-                            return null;
-                          }),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: _emailController,
-                        decoration: textInputDecoration("Email"),
-                        keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const AvatarImage(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                        controller: _nameController,
+                        decoration: textInputDecoration("Nome"),
                         validator: (String? value) {
-                          if (value == null || !value.contains("@")) {
-                            return "Por favor, digite um email válido";
+                          if (value == null || value.length < 3) {
+                            return "Por favor, digite um nome válido";
                           }
                           return null;
-                        },
-                      ),
+                        }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _emailController,
+                      decoration: textInputDecoration("Email"),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (String? value) {
+                        if (value == null || !value.contains("@")) {
+                          return "Por favor, digite um email válido";
+                        }
+                        return null;
+                      },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                          controller: _passwordController,
-                          decoration: textInputDecoration("Senha"),
-                          obscureText: true,
-                          validator: (String? value) {
-                            if (value == null) {
-                              return "Por favor, digite uma senha válida";
-                            }
-                            if (value.length < 8) {
-                              return "Por favor, digite uma senha com pelo menos 8 dígitos";
-                            }
-                            return null;
-                          }),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                          controller: _confirmPasswordController,
-                          decoration: textInputDecoration("Confirmar Senha"),
-                          obscureText: true,
-                          validator: (String? value) {
-                            if (value == null) {
-                              return "Por favor, digite uma senha válida";
-                            }
-                            if (_passwordController.text !=
-                                _confirmPasswordController.text) {
-                              return "As senhas não coincidem.";
-                            }
-                            return null;
-                          }),
-                    ),
-                    CustomButton(350, "Cadastrar", registerButtonClicked),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                        controller: _passwordController,
+                        decoration: textInputDecoration("Senha"),
+                        obscureText: true,
+                        validator: (String? value) {
+                          if (value == null) {
+                            return "Por favor, digite uma senha válida";
+                          }
+                          if (value.length < 8) {
+                            return "Por favor, digite uma senha com pelo menos 8 dígitos";
+                          }
+                          return null;
+                        }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                        controller: _confirmPasswordController,
+                        decoration: textInputDecoration("Confirmar Senha"),
+                        obscureText: true,
+                        validator: (String? value) {
+                          if (value == null) {
+                            return "Por favor, digite uma senha válida";
+                          }
+                          if (_passwordController.text !=
+                              _confirmPasswordController.text) {
+                            return "As senhas não coincidem.";
+                          }
+                          return null;
+                        }),
+                  ),
+                  CustomButton(350, "Cadastrar", registerButtonClicked),
+                ],
               ),
             ),
           ),
