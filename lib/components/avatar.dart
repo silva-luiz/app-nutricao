@@ -1,12 +1,14 @@
 import 'dart:typed_data';
+import 'dart:io'; // Adicione esta importação para utilizar File
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import '../_utils/utils.dart'; // Ajuste o caminho conforme necessário
+import 'package:image_picker/image_picker.dart'; // Ajuste o caminho conforme necessário
 
 class AvatarImage extends StatefulWidget {
+  final String? imagePath;
   final Function(String)? onImagePathChanged; // Torna o callback opcional
 
-  const AvatarImage({super.key, this.onImagePathChanged});
+  const AvatarImage({Key? key, this.imagePath, this.onImagePathChanged})
+      : super(key: key);
 
   @override
   State<AvatarImage> createState() => _AvatarImageState();
@@ -14,27 +16,37 @@ class AvatarImage extends StatefulWidget {
 
 class _AvatarImageState extends State<AvatarImage> {
   Uint8List? _image;
-  String imagePath = '';
+  late String _imagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    _imagePath = widget.imagePath ?? '';
+    if (_imagePath.isNotEmpty) {
+      _loadImageFromPath(_imagePath);
+    }
+  }
+
+  Future<void> _loadImageFromPath(String path) async {
+    final imgBytes = await File(path).readAsBytes();
+    setState(() {
+      _image = Uint8List.fromList(imgBytes);
+    });
+  }
 
   void selectImage() async {
-    // Use apenas uma chamada para obter a imagem e os bytes
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      setState(() {
-        imagePath = image.path;
-        if (widget.onImagePathChanged != null) {
-          widget.onImagePathChanged!(
-              imagePath); // Verifica se o callback não é nulo antes de chamá-lo
-        }
-      });
-
       final imgBytes = await image.readAsBytes();
       setState(() {
-        _image = Uint8List.fromList(
-            imgBytes); // Convertendo List<int> para Uint8List
+        _imagePath = image.path;
+        _image = Uint8List.fromList(imgBytes);
       });
+      if (widget.onImagePathChanged != null) {
+        widget.onImagePathChanged!(_imagePath);
+      }
     } else {
       print('No image selected'); // Caso não haja imagem selecionada
     }

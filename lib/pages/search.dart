@@ -37,6 +37,14 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
+  // Atualiza a lista após uma alteração realizada com sucesso
+  void _loadAlimentos() async {
+    final results = await AlimentoDAO.getAllAlimentos();
+    setState(() {
+      _searchResults = results.map((map) => Alimento.fromMap(map)).toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -102,14 +110,17 @@ class _SearchPageState extends State<SearchPage> {
                       }
 
                       return ListTile(
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
                                   ModifyFoodPage(alimento: item),
                             ),
                           );
+                          if (result != null && result) {
+                            _loadAlimentos();
+                          }
                         },
                         leading: CircleAvatar(
                           backgroundImage: avatarImage,
