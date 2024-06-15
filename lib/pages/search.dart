@@ -1,3 +1,4 @@
+import 'package:app_nutricao/pages/modify_food.dart';
 import 'package:flutter/material.dart';
 import 'package:app_nutricao/components/search_type_radio.dart';
 import 'package:app_nutricao/_core/color_list.dart';
@@ -101,6 +102,15 @@ class _SearchPageState extends State<SearchPage> {
                       }
 
                       return ListTile(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ModifyFoodPage(alimento: item),
+                            ),
+                          );
+                        },
                         leading: CircleAvatar(
                           backgroundImage: avatarImage,
                           radius: 30,
