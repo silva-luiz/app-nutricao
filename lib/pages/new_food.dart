@@ -1,17 +1,11 @@
 import 'package:app_nutricao/components/logout_dialog.dart';
-
-import '../data/database_helper.dart';
- 
-import '../_utils/utils.dart';
 import '../components/custom_button.dart';
 import 'package:flutter/material.dart';
-
+import 'package:app_nutricao/data/food.dart';
 import '../_core/color_list.dart';
 import '../_core/input_style.dart';
 import '../components/avatar.dart';
-import '../components/custom_button.dart';
 import '../components/food_type_radio.dart';
-import '../data/database_helper.dart';
 
 class NewFoodPage extends StatefulWidget {
   const NewFoodPage({super.key});
@@ -44,7 +38,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
     if (_formKey.currentState!.validate()) {
       String foodName = _foodNameController.text;
 
-      final alimentoExiste = await Database.isFoodRegistered(foodName);
+      final alimentoExiste = await AlimentoDAO.isFoodRegistered(foodName);
       print(alimentoExiste);
 
       if (alimentoExiste) {
@@ -54,14 +48,14 @@ class _NewFoodPageState extends State<NewFoodPage> {
           ),
         );
       } else {
-        await Database.insereRegistroAlimento(
+        await AlimentoDAO.insertAlimento(
           foodName,
           imagePath,
-          selectedFoodType, // Use a categoria selecionada
+          selectedFoodType,
           int.parse(_caloriesController.text),
         );
 
-        await Database.imprimirAlimentosNoPrompt();
+        await AlimentoDAO.printAllAlimentos();
         registerButtonClicked();
       }
     }
@@ -100,8 +94,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: AvatarImage(
-                        onImagePathChanged:
-                            _updateImagePath, // Adicione o callback aqui
+                        onImagePathChanged: _updateImagePath,
                       ),
                     ),
                     Padding(
@@ -132,9 +125,7 @@ class _NewFoodPageState extends State<NewFoodPage> {
                         fontSize: 22,
                       ),
                     ),
-                    FoodTypeRadio(
-                        onChanged:
-                            _onFoodTypeChanged), // Utilize o callback aqui
+                    FoodTypeRadio(onChanged: _onFoodTypeChanged),
                     const SizedBox(
                       height: 20,
                     ),

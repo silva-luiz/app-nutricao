@@ -2,8 +2,8 @@ import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/_core/input_style.dart';
 import 'package:app_nutricao/components/custom_button.dart';
 import 'package:app_nutricao/components/logout_dialog.dart';
-import 'package:app_nutricao/data/database_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:app_nutricao/data/food.dart';
 
 class NewMenuPage extends StatefulWidget {
   @override
@@ -27,14 +27,14 @@ class _NewMenuPageState extends State<NewMenuPage> {
   final _formKey = GlobalKey<FormState>();
 
   Future<void> fetchAllItems() async {
-    final items = await Database.exibeTodosRegistrosAlimento();
+    final items = await AlimentoDAO.getAllAlimentos();
     setState(() {
       allItems = items.map((item) => item['dsc_alm'].toString()).toList();
     });
   }
 
   Future<void> searchBreakfast(String query) async {
-    final results = await Database.buscaAlimentoPorNome(query);
+    final results = await AlimentoDAO.searchAlimentoByName(query);
     setState(() {
       if (query.isEmpty) {
         searchBreakfastResults.clear();
@@ -46,7 +46,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
   }
 
   Future<void> searchLunch(String query) async {
-    final results = await Database.buscaAlimentoPorNome(query);
+    final results = await AlimentoDAO.searchAlimentoByName(query);
     setState(() {
       if (query.isEmpty) {
         searchLunchResults.clear();
@@ -58,7 +58,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
   }
 
   Future<void> searchDinner(String query) async {
-    final results = await Database.buscaAlimentoPorNome(query);
+    final results = await AlimentoDAO.searchAlimentoByName(query);
     setState(() {
       if (query.isEmpty) {
         searchDinnerResults.clear();
