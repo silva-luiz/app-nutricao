@@ -2,7 +2,7 @@ import 'package:app_nutricao/_core/color_list.dart';
 import 'package:app_nutricao/_core/input_style.dart';
 import 'package:app_nutricao/components/avatar.dart';
 import 'package:app_nutricao/components/custom_button.dart';
-import 'package:app_nutricao/data/database_helper.dart';
+import 'package:app_nutricao/data/user.dart';
 import 'package:flutter/material.dart';
 import 'package:app_nutricao/_utils/constants.dart' as constants;
 
@@ -32,13 +32,19 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _exibeTodosRegistros();
+  }
+
   void _exibeTodosRegistros() async {
-    final data = await Database.exibeTodosRegistrosUsers();
+    final data = await UserDAO.getAllUsers();
     setState(() {
       _registros = data;
     });
 
-    await Database.imprimirUsuariosNoPrompt();
+    await UserDAO.printAllUsers();
   }
 
   // Realizar login
@@ -56,10 +62,10 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     Future<void> login() async {
-      bool loginValido = await Database.verificaLogin(email, password);
+      bool loginValido = await UserDAO.verifyLogin(email, password);
 
       if (loginValido) {
-        String? nomeUsuario = await Database.getNomeUsuario(email);
+        String? nomeUsuario = await UserDAO.getUserName(email);
         constants.nomeUsuario = nomeUsuario;
         print(constants.nomeUsuario);
 
@@ -84,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
   void registerButtonClicked() async {
     if (_modalFormKey.currentState!.validate()) {
       final emailExiste =
-          await Database.isEmailRegistered(_emailController.text);
+          await UserDAO.isEmailRegistered(_emailController.text);
 
       if (emailExiste) {
         if (!mounted) return;
@@ -123,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // Insere um novo registro
   Future<void> _insereRegistro() async {
-    await Database.insereRegistro(_nameController.text, _emailController.text,
+    await UserDAO.insertUser(_nameController.text, _emailController.text,
         _birthdateController.text, _passwordController.text, imagePath);
     _exibeTodosRegistros();
 
