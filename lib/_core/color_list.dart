@@ -13,6 +13,4 @@ class AppColors {
   static const Color textDark = Color.fromARGB(255, 0, 0, 0);
   static const Color gradientTopColor = Color.fromARGB(255, 202, 253, 195);
   static const Color gradientBottomColor = Color.fromARGB(255, 11, 87, 1);
-
-
 }

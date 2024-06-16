@@ -34,7 +34,7 @@ class CardapioDAO {
     final List<Map<String, dynamic>> cardapios = await getAllCardapios();
     for (var cardapio in cardapios) {
       print(
-          '${cardapio['dsc_cdp']} | ${cardapio['cat_cdp']} | ${cardapio['str_cdp']}');
+          '${cardapio['id_cdp']} | ${cardapio['dsc_cdp']} | ${cardapio['cat_cdp']} | ${cardapio['str_cdp']}');
     }
   }
 

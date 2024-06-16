@@ -102,10 +102,6 @@ class _NewMenuPageState extends State<NewMenuPage> {
       final List<String> dinnerStr =
           dinnerInfo.map((info) => info['dsc_alm']).toList().cast<String>();
 
-      print(breakfastInfo);
-      print(lunchInfo);
-      print(dinnerInfo);
-
       // Verifica se houve problemas com a consulta
       if (breakfastStr.isEmpty || lunchStr.isEmpty || dinnerStr.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -142,7 +138,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
         selectedLunchItems.clear();
         selectedDinnerItems.clear();
       });
-      CardapioDAO.printAllCardapios();
+      CardapioDAO.printAllCardapios(); // Print somente para debug
     } else {
       // Formulário não validado
       ScaffoldMessenger.of(context).showSnackBar(
