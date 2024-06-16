@@ -2,6 +2,9 @@ import 'package:sqflite/sqflite.dart' as sql;
 
 class DatabaseProvider {
   static Future<void> createTables(sql.Database database) async {
+    // Se der erro de cardapio, tire o comentario da linha abaixo, compile 1x o código
+    // Depois remova a linha, e compile mais uma vez o código.
+
     await database.execute("""CREATE TABLE users(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         name TEXT,
@@ -24,8 +27,7 @@ class DatabaseProvider {
         id_cdp INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         dsc_cdp TEXT,
         cat_cdp INTEGER,
-        fk_id_alm INTEGER,
-        FOREIGN KEY (fk_id_alm) REFERENCES tbl_alimento(id_alm)
+        str_cdp TEXT
       )
       """);
   }
@@ -35,7 +37,7 @@ class DatabaseProvider {
       'nutricao.db',
       version: 1,
       onCreate: (sql.Database database, int version) async {
-        await createTables(database);
+        await DatabaseProvider.createTables(database);
       },
     );
   }

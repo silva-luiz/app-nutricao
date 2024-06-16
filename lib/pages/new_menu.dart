@@ -4,6 +4,7 @@ import 'package:app_nutricao/components/custom_button.dart';
 import 'package:app_nutricao/components/logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app_nutricao/data/food.dart';
+import 'package:app_nutricao/data/menu.dart';
 
 class NewMenuPage extends StatefulWidget {
   @override
@@ -69,11 +70,81 @@ class _NewMenuPageState extends State<NewMenuPage> {
     });
   }
 
-  registerMenu() {
+  // Busca informações de cada alimento pra add na lista antes de salvar no banco
+  Future<List<Map<String, dynamic>>> fetchItemsInfo(List<String> items) async {
+    List<Map<String, dynamic>> itemsInfo = [];
+    for (String item in items) {
+      List<Map<String, dynamic>> info =
+          await AlimentoDAO.searchSpecificAlimentoByName(item);
+      if (info.isNotEmpty) {
+        itemsInfo.add(info.first);
+      }
+    }
+    return itemsInfo;
+  }
+
+  registerMenu() async {
     if (_formKey.currentState!.validate()) {
-      print('Form ok');
+      // Formulário validado, podemos salvar o cardápio no banco de dados
+      final menuName = _menuNameController.text;
+      final List<Map<String, dynamic>> breakfastInfo =
+          await fetchItemsInfo(selectedBreakfastItems);
+      final List<Map<String, dynamic>> lunchInfo =
+          await fetchItemsInfo(selectedLunchItems);
+      final List<Map<String, dynamic>> dinnerInfo =
+          await fetchItemsInfo(selectedDinnerItems);
+
+      // Convertendo a lista de informações de alimentos em uma lista de strings
+      final List<String> breakfastStr =
+          breakfastInfo.map((info) => info['dsc_alm']).toList().cast<String>();
+      final List<String> lunchStr =
+          lunchInfo.map((info) => info['dsc_alm']).toList().cast<String>();
+      final List<String> dinnerStr =
+          dinnerInfo.map((info) => info['dsc_alm']).toList().cast<String>();
+
+      print(breakfastInfo);
+      print(lunchInfo);
+      print(dinnerInfo);
+
+      // Verifica se houve problemas com a consulta
+      if (breakfastStr.isEmpty || lunchStr.isEmpty || dinnerStr.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                "Alimento não encontrado. Verifique os alimentos selecionados."),
+          ),
+        );
+        return;
+      }
+
+      // Inserindo o cardápio no banco de dados
+      await CardapioDAO.insertCardapio(menuName, 1,
+          "${breakfastStr.join(',')} | ${lunchStr.join(',')} | ${dinnerStr.join(',')}");
+
+      // Mostrar mensagem de sucesso
+      Navigator.popAndPushNamed(context, '/home');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Cardápio criado com sucesso!"),
+        ),
+      );
+
+      // Limpar os campos e listas após salvar
+      _menuNameController.clear();
+      _searchBreakfastController.clear();
+      _searchLunchController.clear();
+      _searchDinnerController.clear();
+      setState(() {
+        searchBreakfastResults.clear();
+        searchLunchResults.clear();
+        searchDinnerResults.clear();
+        selectedBreakfastItems.clear();
+        selectedLunchItems.clear();
+        selectedDinnerItems.clear();
+      });
+      CardapioDAO.printAllCardapios();
     } else {
-      print('Form nok');
+      // Formulário não validado
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Por favor, preencha corretamente todos os campos!"),
@@ -83,7 +154,6 @@ class _NewMenuPageState extends State<NewMenuPage> {
   }
 
   List<String> allItems = [];
-
   @override
   void initState() {
     super.initState();
@@ -109,9 +179,11 @@ class _NewMenuPageState extends State<NewMenuPage> {
             _searchBreakfastController.clear();
             _searchLunchController.clear();
             _searchDinnerController.clear();
-            searchBreakfastResults.clear();
-            searchLunchResults.clear();
-            searchDinnerResults.clear();
+            setState(() {
+              searchBreakfastResults.clear();
+              searchLunchResults.clear();
+              searchDinnerResults.clear();
+            });
           },
           child: Form(
             key: _formKey,
@@ -120,7 +192,7 @@ class _NewMenuPageState extends State<NewMenuPage> {
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 12.0,
-                    bottom: 10.0,
+                    bottom: 30.0,
                   ),
                   child: SizedBox(
                     width: 350,
@@ -142,13 +214,14 @@ class _NewMenuPageState extends State<NewMenuPage> {
                   ),
                 ),
                 Title(
+                  // Add item cafe da manhã
                   color: AppColors.primaryColor,
                   child: const Text(
                     "Café da manhã",
                     style: TextStyle(
                       color: AppColors.primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
                     ),
                   ),
                 ),
@@ -187,51 +260,62 @@ class _NewMenuPageState extends State<NewMenuPage> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    width: 350,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Wrap(
-                      spacing: 8.0,
-                      children: selectedBreakfastItems
-                          .map(
-                            (item) => Chip(
-                              label: Text(item),
-                              onDeleted: () {
-                                setState(() {
-                                  selectedBreakfastItems.remove(item);
-                                });
-                              },
-                            ),
-                          )
-                          .toList(),
+                // Resultados abaixo do texto
+                SizedBox(
+                  height: searchBreakfastResults.isEmpty
+                      ? 0
+                      : 200, // Ajuste a altura para mostrar mais itens
+                  child: Scrollbar(
+                    thumbVisibility: true, // Mostra a barra de rolagem
+                    child: ListView.builder(
+                      itemCount: searchBreakfastResults.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: Colors.grey[200],
+                          child: ListTile(
+                            title: Text(searchBreakfastResults[index]),
+                            onTap: () {
+                              setState(() {
+                                selectedBreakfastItems
+                                    .add(searchBreakfastResults[index]);
+                                _searchBreakfastController.clear();
+                                searchBreakfastResults
+                                    .clear(); // Limpar resultados
+                              });
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 70,
-                  child: ListView.builder(
-                    itemCount: searchBreakfastResults.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: ListTile(
-                          title: Text(searchBreakfastResults[index]),
-                          onTap: () {
-                            setState(() {
-                              selectedBreakfastItems
-                                  .add(searchBreakfastResults[index]);
-                              _searchBreakfastController.clear();
-                            });
-                          },
-                        ),
-                      );
-                    },
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Visibility(
+                    visible: selectedBreakfastItems.isNotEmpty,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      width: 350,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: selectedBreakfastItems
+                            .map(
+                              (item) => Chip(
+                                label: Text(item),
+                                onDeleted: () {
+                                  setState(() {
+                                    selectedBreakfastItems.remove(item);
+                                  });
+                                },
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ),
                 ),
                 Title(
@@ -240,8 +324,8 @@ class _NewMenuPageState extends State<NewMenuPage> {
                     "Almoço",
                     style: TextStyle(
                       color: AppColors.primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
                     ),
                   ),
                 ),
@@ -280,50 +364,62 @@ class _NewMenuPageState extends State<NewMenuPage> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    width: 350,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Wrap(
-                      spacing: 8.0,
-                      children: selectedLunchItems
-                          .map(
-                            (item) => Chip(
-                              label: Text(item),
-                              onDeleted: () {
-                                setState(() {
-                                  selectedLunchItems.remove(item);
-                                });
-                              },
-                            ),
-                          )
-                          .toList(),
+                // Adiciona a lista de resultados logo abaixo da caixa de texto
+                SizedBox(
+                  height: searchLunchResults.isEmpty
+                      ? 0
+                      : 150, // Ajuste a altura para mostrar mais itens
+                  child: Scrollbar(
+                    thumbVisibility: true, // Mostra a barra de rolagem
+                    child: ListView.builder(
+                      itemCount: searchLunchResults.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: Colors.grey[200],
+                          child: ListTile(
+                            title: Text(searchLunchResults[index]),
+                            onTap: () {
+                              setState(() {
+                                selectedLunchItems
+                                    .add(searchLunchResults[index]);
+                                _searchLunchController.clear();
+                                searchLunchResults
+                                    .clear(); // Limpar os resultados de pesquisa ao selecionar um item
+                              });
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 70,
-                  child: ListView.builder(
-                    itemCount: searchLunchResults.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: ListTile(
-                          title: Text(searchBreakfastResults[index]),
-                          onTap: () {
-                            setState(() {
-                              selectedLunchItems.add(searchLunchResults[index]);
-                              _searchLunchController.clear();
-                            });
-                          },
-                        ),
-                      );
-                    },
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Visibility(
+                    visible: selectedLunchItems.isNotEmpty,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      width: 350,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: selectedLunchItems
+                            .map(
+                              (item) => Chip(
+                                label: Text(item),
+                                onDeleted: () {
+                                  setState(() {
+                                    selectedLunchItems.remove(item);
+                                  });
+                                },
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ),
                 ),
                 Title(
@@ -332,8 +428,8 @@ class _NewMenuPageState extends State<NewMenuPage> {
                     "Jantar",
                     style: TextStyle(
                       color: AppColors.primaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
                     ),
                   ),
                 ),
@@ -372,51 +468,62 @@ class _NewMenuPageState extends State<NewMenuPage> {
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    width: 350,
-                    padding: const EdgeInsets.all(8.0),
-                    child: Wrap(
-                      spacing: 8.0,
-                      children: selectedDinnerItems
-                          .map(
-                            (item) => Chip(
-                              label: Text(item),
-                              onDeleted: () {
-                                setState(() {
-                                  selectedDinnerItems.remove(item);
-                                });
-                              },
-                            ),
-                          )
-                          .toList(),
+                // Adiciona a lista de resultados logo abaixo da caixa de texto
+                SizedBox(
+                  height: searchDinnerResults.isEmpty
+                      ? 0
+                      : 150, // Ajuste a altura para mostrar mais itens
+                  child: Scrollbar(
+                    thumbVisibility: true, // Mostra a barra de rolagem
+                    child: ListView.builder(
+                      itemCount: searchDinnerResults.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: Colors.grey[200],
+                          child: ListTile(
+                            title: Text(searchDinnerResults[index]),
+                            onTap: () {
+                              setState(() {
+                                selectedDinnerItems
+                                    .add(searchDinnerResults[index]);
+                                _searchDinnerController.clear();
+                                searchDinnerResults
+                                    .clear(); // Limpar os resultados de pesquisa ao selecionar um item
+                              });
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 70,
-                  child: ListView.builder(
-                    itemCount: searchDinnerResults.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: ListTile(
-                          title: Text(searchDinnerResults[index]),
-                          onTap: () {
-                            setState(() {
-                              selectedDinnerItems
-                                  .add(searchDinnerResults[index]);
-                              _searchDinnerController.clear();
-                            });
-                          },
-                        ),
-                      );
-                    },
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Visibility(
+                    visible: selectedDinnerItems.isNotEmpty,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      width: 350,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: selectedDinnerItems
+                            .map(
+                              (item) => Chip(
+                                label: Text(item),
+                                onDeleted: () {
+                                  setState(() {
+                                    selectedDinnerItems.remove(item);
+                                  });
+                                },
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ),
                 ),
                 CustomButton(350, "Criar novo cardápio", registerMenu),

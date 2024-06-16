@@ -67,7 +67,19 @@ class AlimentoDAO {
   static Future<List<Map<String, dynamic>>> searchAlimentoByName(
       String nomeAlimento) async {
     final database = await DatabaseProvider.database();
-    return database.query('tbl_alimento',
+    return await database.query('tbl_alimento',
         where: 'dsc_alm LIKE ?', whereArgs: ['%$nomeAlimento%']);
+  }
+
+  static Future<List<Map<String, dynamic>>> searchSpecificAlimentoByName(
+      String nomeAlimento) async {
+    final database = await DatabaseProvider.database();
+    final List<Map<String, dynamic>> results = await database.rawQuery(
+        "SELECT * FROM tbl_alimento WHERE dsc_alm = ?", [nomeAlimento]);
+    if (results.length == 1) {
+      return results;
+    } else {
+      return [];
+    }
   }
 }
