@@ -3,12 +3,12 @@ import 'package:sqflite/sqflite.dart';
 
 class CardapioDAO {
   static Future<int> insertCardapio(
-      String dsc_cdp, int cat_cdp, int fk_id_alm) async {
+      String dsc_cdp, int cat_cdp, String str_cdp) async {
     final database = await DatabaseProvider.database();
     final data = {
       'dsc_cdp': dsc_cdp,
       'cat_cdp': cat_cdp,
-      'fk_id_alm': fk_id_alm,
+      'str_cdp': str_cdp,
     };
     final id = await database.insert('tbl_cardapio', data,
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -20,11 +20,21 @@ class CardapioDAO {
     return database.query('tbl_cardapio', orderBy: 'id_cdp');
   }
 
+  static Future<bool> isMenuRegistered(String menuName) async {
+    final database = await DatabaseProvider.database();
+    final result = await database.query(
+      'tbl_cardapio',
+      where: 'dsc_cdp = ?',
+      whereArgs: [menuName],
+    );
+    return result.isNotEmpty;
+  }
+
   static Future<void> printAllCardapios() async {
     final List<Map<String, dynamic>> cardapios = await getAllCardapios();
     for (var cardapio in cardapios) {
       print(
-          '${cardapio['dsc_cdp']} | ${cardapio['cat_cdp']} | ${cardapio['fk_id_alm']}');
+          '${cardapio['dsc_cdp']} | ${cardapio['cat_cdp']} | ${cardapio['str_cdp']}');
     }
   }
 
