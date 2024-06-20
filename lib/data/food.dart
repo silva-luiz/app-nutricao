@@ -43,11 +43,11 @@ class AlimentoDAO {
     return result;
   }
 
-  static Future<void> deleteAlimento(int id_alm) async {
+  static Future<void> deleteAlimento(int id) async {
     final database = await DatabaseProvider.database();
     try {
       await database
-          .delete('tbl_alimento', where: 'id_alm = ?', whereArgs: [id_alm]);
+          .delete('tbl_alimento', where: 'id_alm = ?', whereArgs: [id]);
     } catch (e) {
       print(
           "Ocorreu algum erro ao remover o registro da tabela 'tbl_alimento': $e");
