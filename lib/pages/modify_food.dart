@@ -44,6 +44,14 @@ class _ModifyFoodPageState extends State<ModifyFoodPage> {
     }
   }
 
+  void _deleteAlimento() {
+    AlimentoDAO.deleteAlimento(widget.alimento.id).then((_) {
+      Navigator.pop(context, true);
+    }).catchError((error) {
+      print('Erro ao excluir alimento: $error');
+    });
+  }
+
   void _onFoodTypeChanged(FoodType foodType) {
     setState(() {
       _selectedCategory = foodType;
@@ -180,10 +188,21 @@ class _ModifyFoodPageState extends State<ModifyFoodPage> {
                   const SizedBox(
                     width: 20,
                   ),
-                  CustomButton(
-                    350,
-                    "Salvar Alterações",
-                    _updateAlimento,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomButton(
+                        150,
+                        "Salvar",
+                        _updateAlimento,
+                      ),
+                      const SizedBox(width: 20),
+                      CustomButton(
+                        150,
+                        "Excluir",
+                        _deleteAlimento,
+                      ),
+                    ],
                   ),
                 ],
               ),
