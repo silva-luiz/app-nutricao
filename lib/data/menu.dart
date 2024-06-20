@@ -38,6 +38,13 @@ class CardapioDAO {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> searchCardapioByName(
+      String searchText) async {
+    final db = await DatabaseProvider.database();
+    return await db.query('tbl_cardapio',
+        where: 'dsc_cdp LIKE ?', whereArgs: ['%$searchText%']);
+  }
+
   static Future<int> updateCardapio(
       int id_cdp, String dsc_cdp, int cat_cdp, int fk_id_alm) async {
     final database = await DatabaseProvider.database();
@@ -66,10 +73,10 @@ class CardapioDAO {
       String nomeAlimento) async {
     final database = await DatabaseProvider.database();
     return database.rawQuery('''
-      SELECT tbl_cardapio.*, tbl_alimento.*
-      FROM tbl_cardapio
-      JOIN tbl_alimento ON tbl_cardapio.fk_id_alm = tbl_alimento.id_alm
-      WHERE tbl_alimento.dsc_alm LIKE ?
-    ''', ['%$nomeAlimento%']);
+    SELECT tbl_cardapio.*, tbl_alimento.*
+    FROM tbl_cardapio
+    JOIN tbl_alimento ON tbl_cardapio.fk_id_alm = tbl_alimento.id_alm
+    WHERE tbl_alimento.dsc_alm LIKE ?
+  ''', ['%$nomeAlimento%']);
   }
 }
